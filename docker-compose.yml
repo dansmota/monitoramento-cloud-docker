@@ -1,0 +1,69 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: zabbix-postgres
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix
+      POSTGRES_DB: zabbix
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:alpine-7.0-latest
+    container_name: zabbix-server
+    environment:
+      DB_SERVER_HOST: postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix
+      POSTGRES_DB: zabbix
+    depends_on:
+      - postgres
+    ports:
+      - "10051:10051"
+    restart: always
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-7.0-latest
+    container_name: zabbix-web
+    environment:
+      DB_SERVER_HOST: postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix
+      POSTGRES_DB: zabbix
+      ZBX_SERVER_HOST: zabbix-server
+      PHP_TZ: America/Sao_Paulo
+    depends_on:
+      - zabbix-server
+    ports:
+      - "8080:8080"
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: always
+
+  monitor:
+    build: ./monitor
+    container_name: monitor-alertas
+    environment:
+      TELEGRAM_TOKEN: "7748107088:AAE7UX76v0FkZPh0PH0NXTH3Ve4xYnxlT0o"
+      TELEGRAM_CHAT_ID: "zgrafmonit_bot"
+      ZABBIX_URL: "http://zabbix-web:8080/zabbix/api_jsonrpc.php"
+      ZABBIX_USER: "Admin"
+      ZABBIX_PASSWORD: "zabbix"
+    depends_on:
+      - zabbix-web
+    restart: always
+
+volumes:
+  pgdata:
+  grafana-data:
