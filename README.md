@@ -41,4 +41,6 @@ monitoramento-cloud-docker/
 ```
 
 ## 🖼 Prints
-/monitoramento-cloud-docker/prints
+![Dashboard Grafana](prints/dashboard.png)
+![Alerta Telegram](prints/alerta.png)
+
