@@ -159,7 +159,7 @@ class ZabbixMonitor:
                 
         except Exception as e:
             logger.error(f"Erro ao enviar mensagem para o Telegram: {e}")
-            # Log mais detalhado do erro
+            # Log detalhado
             try:
                 if hasattr(e, 'response') and e.response:
                     logger.error(f"Resposta de erro: {e.response.text}")
@@ -201,7 +201,7 @@ class ZabbixMonitor:
             emoji = priority_emoji.get(severity, '📘')
             priority_text = priority_names.get(severity, 'Desconhecida')
             
-            # Obter hostname - forma mais robusta
+            # Obter hostname
             host = 'Desconhecido'
             hosts = event.get('hosts')
             if hosts and isinstance(hosts, list) and len(hosts) > 0:
