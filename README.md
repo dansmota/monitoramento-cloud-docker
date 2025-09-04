@@ -42,4 +42,6 @@ monitoramento-cloud-docker/
 ```
 
 ## 🖼 Prints
-Coloque aqui screenshots do Grafana, Zabbix e dos alertas recebidos no Telegram.
+![Dashboard Grafana](prints/dashboard.png)
+![Alerta Telegram](prints/alerta.png)
+
