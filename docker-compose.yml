@@ -1,6 +1,14 @@
 version: '3.9'
 
 services:
+  zabbix-agent:
+    image: zabbix/zabbix-agent:alpine-7.0-latest
+    container_name: zabbix-agent
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_HOSTNAME: zabbix-agent
+    restart: always
+
   postgres:
     image: postgres:15
     container_name: zabbix-postgres
@@ -11,6 +19,11 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zabbix"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   zabbix-server:
     image: zabbix/zabbix-server-pgsql:alpine-7.0-latest
@@ -21,10 +34,16 @@ services:
       POSTGRES_PASSWORD: zabbix
       POSTGRES_DB: zabbix
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "10051:10051"
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 10051"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   zabbix-web:
     image: zabbix/zabbix-web-nginx-pgsql:alpine-7.0-latest
@@ -37,32 +56,51 @@ services:
       ZBX_SERVER_HOST: zabbix-server
       PHP_TZ: America/Sao_Paulo
     depends_on:
-      - zabbix-server
+      zabbix-server:
+        condition: service_healthy
     ports:
       - "8080:8080"
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:10.4.0
     container_name: grafana
+    environment:
+      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
     ports:
       - "3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
     restart: always
+    depends_on:
+      zabbix-web:
+        condition: service_healthy
 
   monitor:
-    build: ./monitor
+    build: 
+      context: ./monitor
+      dockerfile: Dockerfile
     container_name: monitor-alertas
     environment:
       TELEGRAM_TOKEN: "7748107088:AAE7UX76v0FkZPh0PH0NXTH3Ve4xYnxlT0o"
-      TELEGRAM_CHAT_ID: "zgrafmonit_bot"
-      ZABBIX_URL: "http://zabbix-web:8080/zabbix/api_jsonrpc.php"
+      TELEGRAM_CHAT_ID: "5613421617"
+      ZABBIX_URL: "http://zabbix-web:8080/api_jsonrpc.php"
       ZABBIX_USER: "Admin"
       ZABBIX_PASSWORD: "zabbix"
+      CHECK_INTERVAL: "300"  # 5 minutos entre verificações
+      STARTUP_DELAY: "90"    # Aguarda 90s para outros serviços subirem
     depends_on:
-      - zabbix-web
-    restart: always
+      zabbix-web:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   pgdata:

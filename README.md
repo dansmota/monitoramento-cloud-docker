@@ -11,7 +11,7 @@ Este projeto cria um **laboratório DevOps completo** utilizando Docker Compose 
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/SEU_USUARIO/monitoramento-cloud-docker.git
+git clone https://github.com/dansmota/monitoramento-cloud-docker.git
 cd monitoramento-cloud-docker
 ```
 
@@ -25,8 +25,9 @@ docker-compose up -d --build
 ```
 
 4. Acesse os serviços:
-- Zabbix Web: [http://localhost:8080](http://localhost:8080)
-- Grafana: [http://localhost:3000](http://localhost:3000)
+![Dashboard Grafana](prints/dashboard.png)
+![Alerta Telegram](prints/alerta.png)
+
 
 ## 📂 Estrutura
 ```
