@@ -11,7 +11,7 @@ Este projeto cria um **laboratório DevOps completo** utilizando Docker Compose 
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/dansmota/monitoramento-cloud-docker.git
+git clone https://github.com/SEU_USUARIO_GIT/monitoramento-cloud-docker.git
 cd monitoramento-cloud-docker
 ```
 
@@ -37,5 +37,5 @@ monitoramento-cloud-docker/
 
 ## 🖼 Prints
 ![Dashboard Grafana](https://github.com/dansmota/monitoramento-cloud-docker/blob/main/prints/grafana.PNG)
-![Alerta Telegram]([[prints/telegram.png](https://github.com/dansmota/monitoramento-cloud-docker/blob/main/prints/telegram.PNG)
+![Alerta Telegram](https://github.com/dansmota/monitoramento-cloud-docker/blob/main/prints/telegram.PNG)
 
