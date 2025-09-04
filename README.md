@@ -23,12 +23,6 @@ cd monitoramento-cloud-docker
 ```bash
 docker-compose up -d --build
 ```
-
-4. Acesse os serviços:
-![Dashboard Grafana](prints/dashboard.png)
-![Alerta Telegram](prints/alerta.png)
-
-
 ## 📂 Estrutura
 ```
 monitoramento-cloud-docker/
@@ -42,6 +36,6 @@ monitoramento-cloud-docker/
 ```
 
 ## 🖼 Prints
-![Dashboard Grafana](prints/dashboard.png)
-![Alerta Telegram](prints/alerta.png)
+![Dashboard Grafana](prints/grafana.png)
+![Alerta Telegram](prints/telegram.png)
 
