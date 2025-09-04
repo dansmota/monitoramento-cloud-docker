@@ -36,6 +36,6 @@ monitoramento-cloud-docker/
 ```
 
 ## 🖼 Prints
-![Dashboard Grafana](prints/grafana.png)
-![Alerta Telegram](prints/telegram.png)
+![Dashboard Grafana](https://github.com/dansmota/monitoramento-cloud-docker/blob/main/prints/grafana.PNG)
+![Alerta Telegram]([prints/telegram.png](https://github.com/dansmota/monitoramento-cloud-docker/blob/main/prints/grafana.PNG))
 
