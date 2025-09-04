@@ -68,7 +68,7 @@ services:
       retries: 3
 
   grafana:
-    image: grafana/grafana:10.4.0
+    image: grafana/grafana:10.4.0 #Suporta o plugin do Zabbix
     container_name: grafana
     environment:
       - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
@@ -90,13 +90,13 @@ services:
       dockerfile: Dockerfile
     container_name: monitor-alertas
     environment:
-      TELEGRAM_TOKEN: "7748107088:AAE7UX76v0FkZPh0PH0NXTH3Ve4xYnxlT0o"
-      TELEGRAM_CHAT_ID: "5613421617"
+      TELEGRAM_TOKEN: "SEU_TOKEN"
+      TELEGRAM_CHAT_ID: "SEU_CHAT_ID"
       ZABBIX_URL: "http://zabbix-web:8080/api_jsonrpc.php"
       ZABBIX_USER: "Admin"
       ZABBIX_PASSWORD: "zabbix"
-      CHECK_INTERVAL: "300"  # 5 minutos entre verificações
-      STARTUP_DELAY: "90"    # Aguarda 90s para outros serviços subirem
+      CHECK_INTERVAL: "300"  # 5 minutos entre as verificações
+      STARTUP_DELAY: "90"    # Aguarda 90s para testar os serviços novamente
     depends_on:
       zabbix-web:
         condition: service_healthy
